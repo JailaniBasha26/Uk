@@ -14,10 +14,16 @@ public interface PricingInsightsRepo extends JpaRepository<PricingInsightsDAO, I
     List<PricingInsightsDAO> getAll();
 
     @Modifying
-    @Query(value = "insert into PricingInsights (ProductMasterDataNo,Tag, Price,Availability,CreatedAtDateTime,ImageRef) " +
-            "values(?1,?2,?3,?4,?5,?6)", nativeQuery = true)
+    @Query(value = "insert into PricingInsights (ProductMasterDataNo,Tag, ShopName, Price,Url, Availability,CreatedAtDateTime,ImageRef) " +
+            "values(?1,?2,?3,?4,?5,?6,?7,?8)", nativeQuery = true)
     @Transactional
-    void insertPricingInsights(Integer productMasterDataNo, Integer tag, Double price, Boolean availability, Timestamp createdAtDateTime,
+    void insertPricingInsights(Integer productMasterDataNo, Integer tag, String shopName, Double price, String url, Boolean availability, Timestamp createdAtDateTime,
                                String imageRef);
+
+    @Modifying
+    @Query(value = "delete from PricingInsights where Tag=?1", nativeQuery = true)
+    @Transactional
+    void deletePricingInsightsByTag(Integer tag);
+
 
 }

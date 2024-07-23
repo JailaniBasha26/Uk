@@ -22,10 +22,30 @@ public class ProductMasterDataDAO {
     public Integer no;
     public String shopName;
     public String productName;
+    public Integer quantity;
+    public String measurement;
     public String category;
     public String url;
     public Integer tag;
     public Boolean tagStatus;
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getMeasurement() {
+        return measurement;
+    }
+
+    public void setMeasurement(String measurement) {
+        this.measurement = measurement;
+    }
+
+
 
     public Boolean getTagStatus() {
         return tagStatus;

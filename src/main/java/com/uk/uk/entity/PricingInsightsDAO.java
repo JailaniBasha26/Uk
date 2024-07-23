@@ -21,10 +21,29 @@ public class PricingInsightsDAO {
 
     public Integer no;
     public Integer productMasterDataNo;
+    public Integer tag;
+    public String shopName;
     public Double price;
+    public String url;
     public Boolean availability;
     public String ImageRef;
     public Timestamp createdAtDateTime;
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public Integer getTag() {
+        return tag;
+    }
+
+    public void setTag(Integer tag) {
+        this.tag = tag;
+    }
 
     public String getImageRef() {
         return ImageRef;
@@ -73,4 +92,13 @@ public class PricingInsightsDAO {
     public void setCreatedAtDateTime(Timestamp createdAtDateTime) {
         this.createdAtDateTime = createdAtDateTime;
     }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
 }

@@ -31,43 +31,49 @@ public class MorrisonsImpl {
         productMasterDataList = ProductMasterDataRepo.getProductMasterDataByShopName("Morrisons");
 
         for (ProductMasterDataDAO productMasterData : productMasterDataList) {
+            insertPricingInsights(productMasterData);
+        }
+    }
 
-            //Current Timestamp
-            Timestamp now = new Timestamp(System.currentTimeMillis());
+    public void insertPricingInsights(ProductMasterDataDAO productMasterData) {
 
-            // Split the url with urlSplitByHyphen (-)
-            String[] urlSplitByHyphen = productMasterData.getUrl().split("-");
+        //Current Timestamp
+        Timestamp now = new Timestamp(System.currentTimeMillis());
 
-            // Get the pid value from splitted array
-            String pid = urlSplitByHyphen[urlSplitByHyphen.length - 1];
+        // Split the url with urlSplitByHyphen (-)
+        String[] urlSplitByHyphen = productMasterData.getUrl().split("-");
 
-            // Generate the url with the dynamic pid value
-            String url = "https://groceries.morrisons.com/products/dummy-" + pid;
-            try {
+        // Get the pid value from splitted array
+        String pid = urlSplitByHyphen[urlSplitByHyphen.length - 1];
 
-                //Get the response document
-                Document document = Jsoup.connect(url).get();
+        // Generate the url with the dynamic pid value
+        String url = "https://groceries.morrisons.com/products/dummy-" + pid;
+        try {
 
-                // Get the price
-                String itemPriceString = document.getElementsByClass("bop-price__current").get(0).childNode(2)
-                        .toString().split("£")[1];
+            //Get the response document
+            Document document = Jsoup.connect(url).get();
 
-                // Convert the price string to double
-                Double itemPrice = Double.parseDouble(itemPriceString);
+            // Get the price
+            String itemPriceString = document.getElementsByClass("bop-price__current").get(0).childNode(2)
+                    .toString().split("£")[1];
 
-                // Generate the url for product image
-                String imageRef = "https://groceries.morrisons.com/productImages/" + pid.substring(0, Math.min(pid.length(), 3)) + "/" +
-                        pid + "_0_640x640.jpg";
+            // Convert the price string to double
+            Double itemPrice = Double.parseDouble(itemPriceString);
 
-                //Insert into PricingInsights table
-                ProductInsightsRepo.insertPricingInsights(productMasterData.getNo(), productMasterData.getTag(), itemPrice, true, now, imageRef);
-            } catch (IOException e) {
+            // Generate the url for product image
+            String imageRef = "https://groceries.morrisons.com/productImages/" + pid.substring(0, Math.min(pid.length(), 3)) + "/" +
+                    pid + "_0_640x640.jpg";
 
-                //Insert into PricingInsights table and set price as 0.0 and availability as false.
-                ProductInsightsRepo.insertPricingInsights(productMasterData.getNo(), productMasterData.getTag(), 0.0, false, now, "");
+            //Insert into PricingInsights table
+            ProductInsightsRepo.insertPricingInsights(productMasterData.getNo(), productMasterData.getTag(), "Morrisons",
+                    itemPrice, productMasterData.getUrl(), true, now, imageRef);
+        } catch (IOException e) {
 
-                e.printStackTrace();
-            }
+            //Insert into PricingInsights table and set price as 0.0 and availability as false.
+            ProductInsightsRepo.insertPricingInsights(productMasterData.getNo(), productMasterData.getTag(), "Morrisons",
+                    0.0, productMasterData.getUrl(), false, now, "");
+
+            e.printStackTrace();
         }
     }
 
